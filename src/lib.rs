@@ -3,9 +3,15 @@ extern crate proc_macro;
 use quote::quote;
 use syn::{ItemFn, parse_macro_input};
 
+
+extern crate   log;
+extern crate log4rs;
+extern crate chrono;
+
+
 #[proc_macro_attribute]
 pub fn log_handler(
-    attr: proc_macro::TokenStream,
+    _attr: proc_macro::TokenStream,
     item: proc_macro::TokenStream,
 ) -> proc_macro::TokenStream {
     let input_fn:ItemFn = parse_macro_input!(item as ItemFn);
