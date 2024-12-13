@@ -2,11 +2,10 @@
 mod macro_test {
 
     #[test]
-    fn it_works() -> Result<(), &'static str> {
-        f();
-        Ok(())
+    fn main_fn_name()   {
+        main();
     }
 
     #[log_macro::log_handler]
-    fn f() {}
+    fn main() {}
 }

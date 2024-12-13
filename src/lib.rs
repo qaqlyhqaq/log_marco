@@ -1,3 +1,5 @@
+mod check;
+
 extern crate proc_macro;
 
 use quote::quote;
@@ -11,10 +13,17 @@ extern crate chrono;
 
 #[proc_macro_attribute]
 pub fn log_handler(
-    _attr: proc_macro::TokenStream,
+    attr: proc_macro::TokenStream,
     item: proc_macro::TokenStream,
 ) -> proc_macro::TokenStream {
+
+    //function name check
+    crate::check::function_name_check::check(&item);
+
+
+
     let input_fn:ItemFn = parse_macro_input!(item as ItemFn);
+
 
 
     let block = input_fn.block;
