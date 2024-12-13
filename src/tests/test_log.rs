@@ -7,6 +7,6 @@ mod test {
         Ok(())
     }
 
-    #[log_macro::log_handler(fu)]
+    #[log_macro::log_handler]
     fn f() {}
 }
