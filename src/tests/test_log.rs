@@ -1,8 +1,6 @@
 #[cfg(test)]
 mod macro_test {
 
-
-
     #[test]
     #[ignore]
     fn main_fn()   {
