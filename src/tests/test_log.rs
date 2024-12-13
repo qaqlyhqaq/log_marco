@@ -1,6 +1,7 @@
 #[cfg(test)]
 mod macro_test {
 
+    //normal case , not test on default .
     #[test]
     #[ignore]
     fn main_fn()   {
