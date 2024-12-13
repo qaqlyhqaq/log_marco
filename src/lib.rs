@@ -12,11 +12,13 @@ pub fn log_handler(
 
 
     let block = input_fn.block;
-    let attrs = input_fn.attrs;
     let sig = input_fn.sig;
     let generate = quote! {
         #sig {
-            println!("log proc_macro_attribute is call !");
+            {
+                println!("log proc_macro_attribute is call !");
+                println!("注入代码 !");
+            }
             #block
             }
     };

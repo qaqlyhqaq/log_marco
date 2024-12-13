@@ -3,10 +3,10 @@ mod test {
 
     #[test]
     fn it_works() -> Result<(), &'static str> {
-        f();
+        f(1usize);
         Ok(())
     }
 
     #[log_macro::log_handler]
-    fn f() {}
+    fn f(i:usize) {}
 }
