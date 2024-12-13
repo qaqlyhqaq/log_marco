@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod test {
+mod macro_test {
 
     #[test]
     fn it_works() -> Result<(), &'static str> {
