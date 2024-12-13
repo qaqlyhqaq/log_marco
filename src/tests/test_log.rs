@@ -6,6 +6,11 @@ mod macro_test {
         main();
     }
 
-    #[log_macro::log_handler]
+    #[test]
+    fn not_main_fn_name()   {
+        main();
+    }
+
+    #[log_macro::log_handler(allow_not_main)]
     fn main() {}
 }

@@ -3,8 +3,8 @@ mod check;
 extern crate proc_macro;
 
 use quote::quote;
-use syn::{ItemFn, parse_macro_input};
-
+use syn::{ItemFn, parse_macro_input, AttributeArgs, NestedMeta};
+use syn::Lit::Str;
 
 extern crate   log;
 extern crate log4rs;
@@ -17,8 +17,26 @@ pub fn log_handler(
     item: proc_macro::TokenStream,
 ) -> proc_macro::TokenStream {
 
-    //function name check
-    crate::check::function_name_check::check(&item);
+    let args:AttributeArgs = parse_macro_input!(attr as AttributeArgs);
+
+    if args.iter().all(|arg|{
+        //allow_not_main
+        let string1 = if let NestedMeta::Lit(Str(s)) = arg {
+            s.value()
+        } else {
+            return true;
+        };
+
+        if string1.eq("allow_not_main") {
+            return false;
+        }
+
+        return true;
+    }) {
+        //function name check
+        check::function_name_check::check(&item);
+    }
+
 
 
 
