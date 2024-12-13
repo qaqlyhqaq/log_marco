@@ -1,11 +1,10 @@
 mod check;
 
-extern crate proc_macro;
-
 use quote::quote;
 use syn::{ItemFn, parse_macro_input, AttributeArgs, NestedMeta};
 use syn::Meta::Path;
 
+extern crate self as log_macro;
 extern crate   log as log_macro_log;
 extern crate log4rs as log_macro_log4rs;
 extern crate chrono as log_macro_chrono;
@@ -42,18 +41,21 @@ pub fn log_handler(
     let generate = quote! {
         #sig {
          {
-             use log_macro_log::LevelFilter;
-             use log_macro_log4rs::append::console::{ConsoleAppender, Target};
-             use log_macro_log4rs::append::file::FileAppender;
-             use log_macro_log4rs::append::rolling_file::policy::compound::CompoundPolicy;
-             use log_macro_log4rs::append::rolling_file::RollingFileAppender;
-             use log_macro_log4rs::config::{Appender, Logger, Root};
-             use log_macro_log4rs::encode::pattern::PatternEncoder;
-             use log_macro_log4rs::filter::threshold::ThresholdFilter;
-             use log_macro_log4rs::Config;
-             use log_macro_log::error;
+            //  extern crate   log as log_macro_log;
+            // extern crate log4rs as log4rs;
+            // extern crate chrono as chrono;
+             use log::LevelFilter;
+             use log4rs::append::console::{ConsoleAppender, Target};
+             use log4rs::append::file::FileAppender;
+             use log4rs::append::rolling_file::policy::compound::CompoundPolicy;
+             use log4rs::append::rolling_file::RollingFileAppender;
+             use log4rs::config::{Appender, Logger, Root};
+             use log4rs::encode::pattern::PatternEncoder;
+             use log4rs::filter::threshold::ThresholdFilter;
+             use log4rs::Config;
+             use log::error;
              use std::panic;
-             let now_time = log_macro_chrono::Local::now();
+             let now_time = chrono::Local::now();
              let log_file_name =  now_time.format("%Y-%m-%d").to_string();
              let file_path = format!("log/{}.log",log_file_name);
              let stdout = ConsoleAppender::builder().target(Target::Stdout).build();
