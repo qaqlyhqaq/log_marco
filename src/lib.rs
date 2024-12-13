@@ -4,7 +4,8 @@ extern crate proc_macro;
 
 use quote::quote;
 use syn::{ItemFn, parse_macro_input, AttributeArgs, NestedMeta};
-use syn::Lit::Str;
+use syn::Lit::{ByteStr, Str};
+use syn::Meta::Path;
 
 extern crate   log;
 extern crate log4rs;
@@ -20,10 +21,11 @@ pub fn log_handler(
     let args:AttributeArgs = parse_macro_input!(attr as AttributeArgs);
 
     if args.iter().all(|arg|{
+        // panic!("{:?}",arg);
         //allow_not_main
-        let string1 = if let NestedMeta::Lit(Str(s)) = arg {
-            s.value()
-        } else {
+        let string1 = if let NestedMeta::Meta(Path(s)) = arg {
+            s.segments[0].ident.to_string()
+        } else  {
             return true;
         };
 

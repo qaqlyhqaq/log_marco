@@ -1,16 +1,22 @@
 #[cfg(test)]
 mod macro_test {
 
+
+
     #[test]
-    fn main_fn_name()   {
+    #[ignore]
+    fn main_fn()   {
         main();
     }
 
     #[test]
     fn not_main_fn_name()   {
-        main();
+        main_not_main_case();
     }
 
-    #[log_macro::log_handler(allow_not_main)]
+    #[log_macro::log_handler()]
     fn main() {}
+
+    #[log_macro::log_handler(allow_not_main)]
+    fn main_not_main_case() {}
 }
