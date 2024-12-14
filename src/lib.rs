@@ -10,33 +10,6 @@ pub fn log_handler(
     attr: proc_macro::TokenStream,
     item: proc_macro::TokenStream,
 ) -> proc_macro::TokenStream {
-    let x = std::env!("CARGO_MANIFEST_DIR");
-    let string = format!("{}/Cargo.toml", x);
-    let path = std::path::Path::new(string.as_str());
-
-    let cargo_toml_str = std::fs::read(path.to_str().unwrap()).unwrap();
-    let config:Value = toml::from_str(String::from_utf8(cargo_toml_str).unwrap().as_str()).unwrap();
-
-    if config["dev-dependencies"].get("log").is_none()
-        && config["dependencies"].get("log").is_none(){
-        panic!("无log 依赖");
-    }else{
-        println!("找到 log crate !");
-    }
-
-    if config["dev-dependencies"].get("log4rs").is_none()
-        && config["dependencies"].get("log4rs").is_none(){
-        panic!("无log4rs 依赖");
-    }else{
-        println!("找到 log4rs crate !");
-    }
-
-    if config["dev-dependencies"].get("chrono").is_none()
-        && config["dependencies"].get("chrono").is_none(){
-        panic!("无chrono 依赖");
-    }else{
-        println!("找到 chrono crate !");
-    }
 
     let args:AttributeArgs = parse_macro_input!(attr as AttributeArgs);
 
@@ -50,11 +23,14 @@ pub fn log_handler(
         if string1.eq("allow_not_main") {
             return false;
         }
-
-        return true;
+        true
     }) {
+        //check is whether main that function name .
         check::function_name_check::check(&item);
     }
+
+    //check dependencies crate
+    check::depend_crate_chack::check(&item);
 
     let input_fn:ItemFn = parse_macro_input!(item as ItemFn);
 
