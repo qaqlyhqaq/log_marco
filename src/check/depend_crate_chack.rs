@@ -1,11 +1,8 @@
-use syn::{ItemFn, parse_macro_input};
 use toml::Value;
 
-//func name check ,
-//if not main ,then panic once error message !
 pub(crate) fn check( _item:& proc_macro::TokenStream)-> proc_macro::TokenStream{
 
-    let x = std::env!("CARGO_MANIFEST_DIR");
+    let x = env!("CARGO_MANIFEST_DIR");
     let string = format!("{}/Cargo.toml", x);
     let path = std::path::Path::new(string.as_str());
 

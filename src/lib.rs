@@ -4,7 +4,6 @@ use std::ops::Index;
 use quote::quote;
 use syn::{ItemFn, parse_macro_input, AttributeArgs, NestedMeta};
 use syn::Meta::Path;
-use toml::Value;
 #[proc_macro_attribute]
 pub fn log_handler(
     attr: proc_macro::TokenStream,
