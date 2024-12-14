@@ -2,7 +2,7 @@ use toml::Value;
 
 
 #[inline]
-pub(crate) fn check( _item:& proc_macro::TokenStream)-> proc_macro::TokenStream{
+pub(crate) fn check( ){
 
     //CARGO_MANIFEST_DIR
     let x = env!("CARGO_MANIFEST_DIR");
@@ -32,8 +32,5 @@ pub(crate) fn check( _item:& proc_macro::TokenStream)-> proc_macro::TokenStream{
     }else{
         println!("找到 chrono crate !");
     }
-
-
-    proc_macro::TokenStream::new()
 
 }

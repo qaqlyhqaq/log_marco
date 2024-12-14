@@ -1,14 +1,62 @@
 mod check;
 
 use std::ops::Index;
+use quote::__private::TokenStream;
 use quote::quote;
 use syn::{ItemFn, parse_macro_input, AttributeArgs, NestedMeta};
 use syn::Meta::Path;
+
+
+#[proc_macro]
+pub fn inner_check(ident: proc_macro::TokenStream) -> proc_macro::TokenStream {
+    // let new_func_name = format!("test_{}", ident.to_string());
+
+    let expanded = quote! {
+
+        use toml::Value;
+
+        //CARGO_MANIFEST_DIR
+    let x = env!("CARGO_MANIFEST_DIR");
+    let string = format!("{}/Cargo.toml", x);
+    let path = std::path::Path::new(string.as_str());
+
+    let cargo_toml_str = std::fs::read(path.to_str().unwrap()).unwrap();
+    let config:Value = toml::from_str(String::from_utf8(cargo_toml_str).unwrap().as_str()).unwrap();
+
+    if config["dev-dependencies"].get("log").is_none()
+        && config["dependencies"].get("log").is_none(){
+        panic!("无log 依赖");
+    }else{
+        println!("找到 log crate !");
+    }
+
+    if config["dev-dependencies"].get("log4rs").is_none()
+        && config["dependencies"].get("log4rs").is_none(){
+        panic!("无log4rs 依赖");
+    }else{
+        println!("找到 log4rs crate !");
+    }
+
+    if config["dev-dependencies"].get("chrono").is_none()
+        && config["dependencies"].get("chrono").is_none(){
+        panic!("无chrono 依赖");
+    }else{
+        println!("找到 chrono crate !");
+    }
+
+    };
+    expanded.into()
+}
+
+
+
 #[proc_macro_attribute]
 pub fn log_handler(
     attr: proc_macro::TokenStream,
     item: proc_macro::TokenStream,
 ) -> proc_macro::TokenStream {
+
+    let mut item = item;
 
     let args:AttributeArgs = parse_macro_input!(attr as AttributeArgs);
 
@@ -25,11 +73,11 @@ pub fn log_handler(
         true
     }) {
         //check is whether main that function name .
-        check::function_name_check::check(&item);
+        item = check::function_name_check::check(item);
     }
 
     //check dependencies crate
-    check::depend_crate_chack::check(&item);
+    // item = check::depend_crate_chack::check(item);
 
     let input_fn:ItemFn = parse_macro_input!(item as ItemFn);
 
@@ -37,7 +85,12 @@ pub fn log_handler(
     let sig = input_fn.sig;
     let generate = quote! {
         #sig {
+            //预执行代码 块
          {
+
+             //检查使用者 crate 环境是否符合需求
+             log_macro::inner_check!();
+
              use log::LevelFilter;
              use log4rs::append::console::{ConsoleAppender, Target};
              use log4rs::append::file::FileAppender;
