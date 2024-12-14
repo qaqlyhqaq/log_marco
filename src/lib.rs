@@ -1,20 +1,42 @@
 mod check;
 
+use std::ops::Index;
 use quote::quote;
 use syn::{ItemFn, parse_macro_input, AttributeArgs, NestedMeta};
 use syn::Meta::Path;
-
-extern crate self as log_macro;
-extern crate   log as log_macro_log;
-extern crate log4rs as log_macro_log4rs;
-extern crate chrono as log_macro_chrono;
-
-
+use toml::Value;
 #[proc_macro_attribute]
 pub fn log_handler(
     attr: proc_macro::TokenStream,
     item: proc_macro::TokenStream,
 ) -> proc_macro::TokenStream {
+    let x = std::env!("CARGO_MANIFEST_DIR");
+    let string = format!("{}/Cargo.toml", x);
+    let path = std::path::Path::new(string.as_str());
+
+    let cargo_toml_str = std::fs::read(path.to_str().unwrap()).unwrap();
+    let config:Value = toml::from_str(String::from_utf8(cargo_toml_str).unwrap().as_str()).unwrap();
+
+    if config["dev-dependencies"].get("log").is_none()
+        && config["dependencies"].get("log").is_none(){
+        panic!("无log 依赖");
+    }else{
+        println!("找到 log crate !");
+    }
+
+    if config["dev-dependencies"].get("log4rs").is_none()
+        && config["dependencies"].get("log4rs").is_none(){
+        panic!("无log4rs 依赖");
+    }else{
+        println!("找到 log4rs crate !");
+    }
+
+    if config["dev-dependencies"].get("chrono").is_none()
+        && config["dependencies"].get("chrono").is_none(){
+        panic!("无chrono 依赖");
+    }else{
+        println!("找到 chrono crate !");
+    }
 
     let args:AttributeArgs = parse_macro_input!(attr as AttributeArgs);
 
@@ -41,9 +63,6 @@ pub fn log_handler(
     let generate = quote! {
         #sig {
          {
-            //  extern crate   log as log_macro_log;
-            // extern crate log4rs as log4rs;
-            // extern crate chrono as chrono;
              use log::LevelFilter;
              use log4rs::append::console::{ConsoleAppender, Target};
              use log4rs::append::file::FileAppender;
