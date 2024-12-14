@@ -1,54 +1,9 @@
 mod check;
 
 use std::ops::Index;
-use quote::__private::TokenStream;
 use quote::quote;
 use syn::{ItemFn, parse_macro_input, AttributeArgs, NestedMeta};
 use syn::Meta::Path;
-
-
-#[proc_macro]
-pub fn inner_check(ident: proc_macro::TokenStream) -> proc_macro::TokenStream {
-    // let new_func_name = format!("test_{}", ident.to_string());
-
-    let expanded = quote! {
-
-        use toml::Value;
-
-        //CARGO_MANIFEST_DIR
-    let x = env!("CARGO_MANIFEST_DIR");
-    let string = format!("{}/Cargo.toml", x);
-    let path = std::path::Path::new(string.as_str());
-
-    let cargo_toml_str = std::fs::read(path.to_str().unwrap()).unwrap();
-    let config:Value = toml::from_str(String::from_utf8(cargo_toml_str).unwrap().as_str()).unwrap();
-
-    if config["dev-dependencies"].get("log").is_none()
-        && config["dependencies"].get("log").is_none(){
-        panic!("无log 依赖");
-    }else{
-        println!("找到 log crate !");
-    }
-
-    if config["dev-dependencies"].get("log4rs").is_none()
-        && config["dependencies"].get("log4rs").is_none(){
-        panic!("无log4rs 依赖");
-    }else{
-        println!("找到 log4rs crate !");
-    }
-
-    if config["dev-dependencies"].get("chrono").is_none()
-        && config["dependencies"].get("chrono").is_none(){
-        panic!("无chrono 依赖");
-    }else{
-        println!("找到 chrono crate !");
-    }
-
-    };
-    expanded.into()
-}
-
-
 
 #[proc_macro_attribute]
 pub fn log_handler(
@@ -88,8 +43,6 @@ pub fn log_handler(
             //预执行代码 块
          {
 
-             //检查使用者 crate 环境是否符合需求
-             log_macro::inner_check!();
 
              use log::LevelFilter;
              use log4rs::append::console::{ConsoleAppender, Target};
