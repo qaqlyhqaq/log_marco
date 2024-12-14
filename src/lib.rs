@@ -31,9 +31,6 @@ pub fn log_handler(
         item = check::function_name_check::check(item);
     }
 
-    //check dependencies crate
-    // item = check::depend_crate_chack::check(item);
-
     let input_fn:ItemFn = parse_macro_input!(item as ItemFn);
 
     let block = input_fn.block;
@@ -42,7 +39,6 @@ pub fn log_handler(
         #sig {
             //预执行代码 块
          {
-
 
              use log_lib::log::LevelFilter;
              use log_lib::log4rs::append::console::{ConsoleAppender, Target};

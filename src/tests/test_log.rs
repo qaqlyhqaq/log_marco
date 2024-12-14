@@ -13,6 +13,9 @@ mod macro_test {
         main_not_main_case();
     }
 
+
+
+
     #[log_macro::log_handler()]
     fn main() {}
 
