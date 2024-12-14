@@ -44,18 +44,18 @@ pub fn log_handler(
          {
 
 
-             use log::LevelFilter;
-             use log4rs::append::console::{ConsoleAppender, Target};
-             use log4rs::append::file::FileAppender;
-             use log4rs::append::rolling_file::policy::compound::CompoundPolicy;
-             use log4rs::append::rolling_file::RollingFileAppender;
-             use log4rs::config::{Appender, Logger, Root};
-             use log4rs::encode::pattern::PatternEncoder;
-             use log4rs::filter::threshold::ThresholdFilter;
-             use log4rs::Config;
-             use log::error;
+             use log_lib::log::LevelFilter;
+             use log_lib::log4rs::append::console::{ConsoleAppender, Target};
+             use log_lib::log4rs::append::file::FileAppender;
+             use log_lib::log4rs::append::rolling_file::policy::compound::CompoundPolicy;
+             use log_lib::log4rs::append::rolling_file::RollingFileAppender;
+             use log_lib::log4rs::config::{Appender, Logger, Root};
+             use log_lib::log4rs::encode::pattern::PatternEncoder;
+             use log_lib::log4rs::filter::threshold::ThresholdFilter;
+             use log_lib::log4rs::Config;
+             use log_lib::log::error;
              use std::panic;
-             let now_time = chrono::Local::now();
+             let now_time = log_lib::chrono::Local::now();
              let log_file_name =  now_time.format("%Y-%m-%d").to_string();
              let file_path = format!("log/{}.log",log_file_name);
              let stdout = ConsoleAppender::builder().target(Target::Stdout).build();
