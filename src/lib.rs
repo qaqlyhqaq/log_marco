@@ -60,9 +60,9 @@ pub fn log_handler(
              let file_path = format!("log/{}.log",log_file_name);
              let stdout = ConsoleAppender::builder().target(Target::Stdout).build();
              let window_size = 3; // log0, log1, log2
-             let fixed_window_roller =log4rs::append::rolling_file::policy::compound::roll::fixed_window::FixedWindowRoller::builder().build("log/log{}", window_size).unwrap();
+             let fixed_window_roller =log_lib::log4rs::append::rolling_file::policy::compound::roll::fixed_window::FixedWindowRoller::builder().build("log/log{}", window_size).unwrap();
              let size_limit = 10*1024 * 1024*1024; // 10*1GB as max log file size to roll
-             let size_trigger = log4rs::append::rolling_file::policy::compound::trigger::size::SizeTrigger::new(size_limit);
+             let size_trigger = log_lib::log4rs::append::rolling_file::policy::compound::trigger::size::SizeTrigger::new(size_limit);
              let compound_policy = CompoundPolicy::new(Box::new(size_trigger),Box::new(fixed_window_roller));
              let rolling_file_appender = RollingFileAppender::builder()
              .append(true)
@@ -101,7 +101,7 @@ pub fn log_handler(
             println!("panic occurred: location:{:?},reason:{}", panic_info.location(),x);
             error!("panic occurred: location:{:?},reason:{}", panic_info.location(),x);
         }));
-        let _handle = log4rs::init_config(config).unwrap();
+        let _handle = log_lib::log4rs::init_config(config).unwrap();
              println!("日志上下文初始化成功!");
         }
 
