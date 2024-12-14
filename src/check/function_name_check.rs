@@ -2,6 +2,7 @@ use syn::{ItemFn, parse_macro_input};
 
 //func name check ,
 //if not main ,then panic once error message !
+#[inline]
 pub(crate) fn check( item:& proc_macro::TokenStream)-> proc_macro::TokenStream{
 
     let stream_ = item.clone();

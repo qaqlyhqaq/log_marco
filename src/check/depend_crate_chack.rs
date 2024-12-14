@@ -1,7 +1,10 @@
 use toml::Value;
 
+
+#[inline]
 pub(crate) fn check( _item:& proc_macro::TokenStream)-> proc_macro::TokenStream{
 
+    //CARGO_MANIFEST_DIR
     let x = env!("CARGO_MANIFEST_DIR");
     let string = format!("{}/Cargo.toml", x);
     let path = std::path::Path::new(string.as_str());
